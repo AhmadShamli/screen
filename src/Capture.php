@@ -33,13 +33,13 @@ class Capture
      * @var string
      */
     protected $top;
-
+    
     /**
      * dom element left position
      * @var string
      */
     protected $left;
-
+    
     /**
      * Width of the page to render
      *
@@ -89,20 +89,13 @@ class Capture
      */
     protected $userAgentString = '';
 
-	/**
-	 * Sets the option to block analytics from being pinged
-	 *
-	 * @var boolean
-	 */
-	protected $blockAnalytics = false;
-
     /**
      * Sets the timeout period
      *
      * @var int
      */
     protected $timeout = 0;
-
+    
      /**
      * Sets the delay period
      *
@@ -123,6 +116,13 @@ class Capture
      * @var string
      */
     public $templatePath;
+	
+    /**
+     * Template name, in which will be the template files to execute
+     *
+     * @var string
+     */
+    public $templateName = 'screen-capture';
 
     /**
      * Jobs directory, directory for temporary files to be written and executed with phantomjs
@@ -229,7 +229,7 @@ class Capture
         if ($this->timeout) {
             $data['timeout'] = $this->timeout;
         }
-
+        
         if ($this->delay) {
             $data['delay'] = $this->delay;
         }
@@ -242,10 +242,6 @@ class Capture
             $data['includedJsSnippets'] = $this->includedJsSnippets;
         }
 
-	    if ($this->blockAnalytics) {
-		    $data['blockAnalytics'] = $this->blockAnalytics;
-	    }
-
         if ($deleteFileIfExists && file_exists($this->imageLocation) && is_writable($this->imageLocation)) {
             unlink($this->imageLocation);
         }
@@ -255,7 +251,7 @@ class Capture
 
         if (!is_file($jobPath)) {
             // Now we write the code to a js file
-            $resultString = $this->getTemplateResult('screen-capture', $data);
+            $resultString = $this->getTemplateResult($this->templateName, $data);
             file_put_contents($jobPath, $resultString);
         }
 
@@ -352,7 +348,7 @@ class Capture
 
         return $this;
     }
-
+    
     /**
      * Sets the page width
      *
@@ -366,7 +362,7 @@ class Capture
 
         return $this;
     }
-
+    
     /**
      * Sets the page width
      *
@@ -450,30 +446,6 @@ class Capture
 
         return $this;
     }
-
-	/**
-	 * Sets the block analytics type
-	 *
-	 * @param boolean
-	 *
-	 * @return Capture
-	 */
-	public function setBlockAnalytics($boolean)
-	{
-		$this->blockAnalytics = $boolean;
-
-		return $this;
-	}
-
-	/**
-	 * Returns the block analytics instance
-	 *
-	 * @return Type
-	 */
-	public function getBlockAnalytics()
-	{
-		return $this->blockAnalytics;
-	}
 
     /**
      * Returns the image type instance
@@ -572,6 +544,20 @@ class Capture
     public function setOptions($options)
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Sets the options which will be passed to phantomjs
+     *
+     * @param array $options
+     *
+     * @return $this
+     */
+    public function settemplateName($templateName)
+    {
+        $this->templateName = $templateName;
 
         return $this;
     }
