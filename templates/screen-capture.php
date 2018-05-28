@@ -14,6 +14,16 @@ page.clipRect = <?php echo json_encode($clipOptions) ?>;
 page.settings.resourceTimeout = <?php echo $timeout ?>;
 <?php endif ?>
 
+<?php if ($reloadOnNon200===true) : ?>
+page.onResourceReceived = function(response){
+    if (response.url === system.args[1]) { // TODO handle redirects if necessary
+		if(response.headers.status !== 200) {
+		   page.reload();
+		}
+    }
+};
+<?php endif ?>
+
 <?php if (isset($blockAnalytics) && $blockAnalytics == true) : ?>
 page.onResourceRequested = function(requestData, request) {
 	// Google Analytics Tracking
