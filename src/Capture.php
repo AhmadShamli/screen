@@ -123,6 +123,13 @@ class Capture
      * @var string
      */
     public $templateName = 'screen-capture';
+	
+    /**
+     * Reload on header status non 200
+     *
+     * @var bool
+     */
+    public $reloadOnNon200 = false;
 
     /**
      * Jobs directory, directory for temporary files to be written and executed with phantomjs
@@ -236,6 +243,10 @@ class Capture
 
         if ($this->includedJsScripts) {
             $data['includedJsScripts'] = $this->includedJsScripts;
+        }
+
+        if ($this->reloadOnNon200) {
+            $data['reloadOnNon200'] = $this->reloadOnNon200;
         }
 
         if ($this->includedJsSnippets) {
@@ -551,13 +562,27 @@ class Capture
     /**
      * Sets the options which will be passed to phantomjs
      *
-     * @param array $options
+     * @param string
      *
      * @return $this
      */
     public function settemplateName($templateName)
     {
         $this->templateName = $templateName;
+
+        return $this;
+    }
+
+    /**
+     * Sets the options which will be passed to phantomjs
+     *
+     * @param bool
+     *
+     * @return $this
+     */
+    public function setreloadOnNon200($val)
+    {
+        $this->reloadOnNon200 = $val;
 
         return $this;
     }
